@@ -22,63 +22,52 @@ Since this is a custom extension, it must be loaded into Chrome manually.
 
 ## Configuration: Setting up Google API Credentials
 
-To use this extension, you must configure it with your own Google API credentials. This allows the extension to securely access your Gmail account.
+To use this extension, you must configure it with your own Google API credentials. This allows the extension to securely access your Gmail account. The process involves two main parts: creating credentials in the Google Cloud Console and adding them to the extension's settings.
 
 **You must have a Google Cloud account to complete these steps.**
 
-### Step 1: Create a Google Cloud Project
+### Part 1: Create Google API Credentials
 
-1.  Go to the [Google Cloud Console](https://console.cloud.google.com/).
-2.  Click the project drop-down and select **New Project**.
-3.  Give your project a name (e.g., "Chrome OTP Helper") and click **Create**.
+1.  **Create a Google Cloud Project:**
+    *   Go to the [Google Cloud Console](https://console.cloud.google.com/).
+    *   Click the project drop-down and select **New Project**.
+    *   Give your project a name (e.g., "Chrome OTP Helper") and click **Create**.
 
-### Step 2: Enable the Gmail API
+2.  **Enable the Gmail API:**
+    *   From your project's dashboard, navigate to **APIs & Services > Library**.
+    *   Search for "Gmail API" and select it.
+    *   Click the **Enable** button.
 
-1.  From your project's dashboard, navigate to **APIs & Services > Library**.
-2.  Search for "Gmail API" and select it.
-3.  Click the **Enable** button.
+3.  **Configure the OAuth Consent Screen:**
+    *   Go to **APIs & Services > OAuth consent screen**.
+    *   Choose **External** and click **Create**.
+    *   Fill in the required app information (App name: "OTP Helper", your email for support and developer contact).
+    *   On the **Scopes** page, add the `.../auth/gmail.readonly` scope.
+    *   On the **Test users** page, add the Google account(s) you want to use with this extension.
 
-### Step 3: Configure the OAuth Consent Screen
+4.  **Create OAuth 2.0 Credentials:**
+    *   Go to **APIs & Services > Credentials**.
+    *   Click **+ Create Credentials** and select **OAuth client ID**.
+    *   For **Application type**, select **Chrome App**.
+    *   Give it a name (e.g., "OTP Helper Client").
+    *   For **Application ID**, you must enter the ID of your extension. You can find this by following the **Installation** steps below first, and then looking at the ID of the loaded extension in `chrome://extensions`.
+    *   Click **Create**.
 
-1.  Go to **APIs & Services > OAuth consent screen**.
-2.  Choose **External** and click **Create**.
-3.  Fill in the required fields:
-    *   **App name:** "OTP Helper"
-    *   **User support email:** Your email address.
-    *   **Developer contact information:** Your email address.
-4.  Click **Save and Continue**.
-5.  On the **Scopes** page, click **Add or Remove Scopes**. Find the scope for **Gmail API** with the path `.../auth/gmail.readonly`, check it, and click **Update**.
-6.  Click **Save and Continue**.
-7.  On the **Test users** page, add your own Gmail address.
-8.  Click **Save and Continue**, then **Back to Dashboard**.
+5.  **Copy Your Client ID:**
+    *   After creating the credentials, a **Client ID** will be displayed. **Copy this value.** You will need it in the next part.
 
-### Step 4: Create OAuth 2.0 Credentials
+### Part 2: Configure the Extension
 
-1.  Go to **APIs & Services > Credentials**.
-2.  Click **+ Create Credentials** and select **OAuth client ID**.
-3.  For **Application type**, select **Chrome App**.
-4.  Give it a name (e.g., "OTP Helper Client").
-5.  For **Application ID**, enter the ID of your extension. You can find this in `chrome://extensions` after you have loaded it unpacked.
-6.  Click **Create**.
+1.  **Open Extension Options:**
+    *   After [installing the extension](#installation), right-click the OTP Helper icon in your Chrome toolbar.
+    *   Select **Options**. This will open a new tab with the configuration page.
 
-### Step 5: Update the Manifest File
+2.  **Save Your Client ID:**
+    *   Paste the **Client ID** you copied from the Google Cloud Console into the input field.
+    *   Click **Save**.
 
-1.  After creating the credentials, a **Client ID** will be displayed. Copy this value.
-2.  Open the `manifest.json` file in the extension's code directory.
-3.  Find the `oauth2` section and replace `"YOUR_OAUTH_CLIENT_ID.apps.googleusercontent.com"` with the Client ID you just copied.
-
-    ```json
-    "oauth2": {
-      "client_id": "PASTE_YOUR_CLIENT_ID_HERE.apps.googleusercontent.com",
-      "scopes": [
-        "https://www.googleapis.com/auth/gmail.readonly"
-      ]
-    }
-    ```
-4.  Save the `manifest.json` file.
-5.  Go back to `chrome://extensions` and click the "Reload" button for the OTP Helper extension.
-
-The setup is now complete. Click the extension icon to log in to your Google account.
+3.  **Log In:**
+    *   The setup is now complete. Click the extension icon in your toolbar. This will prompt a Google login window. Sign in to the account you designated as a "test user" to grant the extension access.
 
 ## Permissions
 
